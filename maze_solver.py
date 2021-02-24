@@ -10,30 +10,33 @@ import cv2 as cv
 start_time = time.time()
 
 #FILENAME FORMAT:  "{X_GRID} BY {Y_GRID}... .png" 
-filename = '200 by 200 orthogonal maze.png'    
+#filename = "Maze_examples/200 by 200 orthogonal maze.png"
+filename = input("Type the path to file of the maze image:\n")
+mesh = input('Enter the mesh size separeted by space. e.g. "20 20":\n')
 maze = cv.imread(filename)
 
 height, width = maze.shape[:2] #in pixels
-mash_j, mash_i = (int(filename.split()[0]), int(filename.split()[2]))
+#mesh_j, mesh_i = (int(filename.split()[0]), int(filename.split()[2]))
+mesh_j, mesh_i = int(mesh.split()[0]), int(mesh.split()[1])
 
-
-cell_size = int(height/mash_i) , int(width/mash_j)
+print(mesh_j, mesh_i)
+cell_size = int(height/mesh_i) , int(width/mesh_j)
 cell_center = (int(cell_size[0]/2), int(cell_size[1]/2))
 
 
 
 class Cell:
-      """defines the paths through the cells over the mash """
+      """defines the paths through the cells over the mesh """
      
       def __init__(self, index_i, index_j):
-            global cell_size, height, width, maze, mash_i, mash_j
+            global cell_size, height, width, maze, mesh_i, mesh_j
              
             self.i = index_i
             self.j = index_j
             self.height = height
             self.width = width
             self.cell_size_x, self.cell_size_y = (int(cell_size[0]), int(cell_size[1]))   
-            (self.mash_i, self.mash_j) = (mash_i, mash_j)
+            (self.mesh_i, self.mesh_j) = (mesh_i, mesh_j)
             self.maze = maze
             self.tol =1               
          
@@ -95,11 +98,11 @@ class Cell:
         Dest=[] #list of possibele destinations of each cell 
         if self.j!=0 and self.left_pass()==True:
             Dest.append((self.i, self.j-1))
-        if self.j!=(self.mash_j-1) and self.right_pass()==True:
+        if self.j!=(self.mesh_j-1) and self.right_pass()==True:
             Dest.append((self.i, self.j+1))
         if self.i!=0 and self.top_pass()==True:
             Dest.append((self.i-1, self.j))
-        if self.i!=(self.mash_i-1) and self.bottom_pass()==True:
+        if self.i!=(self.mesh_i-1) and self.bottom_pass()==True:
             Dest.append((self.i+1, self.j)) 
         return Dest
 
@@ -112,26 +115,26 @@ def Path():
     Destinations=[]
     Nodes=[]
 
-    for i in range(mash_i):
+    for i in range(mesh_i):
         line = []
-        for j in range(mash_j):
+        for j in range(mesh_j):
             dest =  Cell(i,j).go_to()
             line.append(dest)
             if i==0 and Cell(i,j).top_pass()==True:
                 start = (i,j)
                 if len(dest)>1:
                     Nodes.append((i,j))
-            if i==(mash_i-1) and Cell(i,j).bottom_pass()==True:
+            if i==(mesh_i-1) and Cell(i,j).bottom_pass()==True:
                 end = (i,j)
                 if len(dest)>1:
                     Nodes.append((i,j))
             if len(dest)>2 :
                 Nodes.append((i,j))
         Destinations.append(line)
-    print(Destinations[0][0])
+
         
     #start = (0,250)
-    #end= (mash_i-1, 250)    
+    #end= (mesh_i-1, 250)    
     Dest_sol =copy.deepcopy(Destinations)
     prev_step = start
     Block =[]    
@@ -177,8 +180,7 @@ def Path():
                   
             
 def draw_path():
-    Dest, Branches, end, start = Path()  
-      
+    Dest, Branches, end, start = Path()        
     
     #creates a clean list of points of the solution
     Br=[]
@@ -195,24 +197,24 @@ def draw_path():
         for cell in branch:
             #cv.circle(maze, Cell(cell[0], cell[1]).to_coord() , 3, [0, 150, 255],-1)
             if cell != Dots[-1]:
-                Dots.append(cell)       
-    
+                Dots.append(cell)  
+    #dwaw the path lines 
+    for i in range(len(Dots)-1):        
+        coord1 = Cell(Dots[i][0], Dots[i][1]).to_coord()
+        coord2 = Cell(Dots[i+1][0], Dots[i+1][1]).to_coord()
+        
+        cv.line(maze, coord1, coord2 , [255, 0, 0], 3)
     
     # draws a small datail of start and end 
     coord_start = Cell(Dots[0][0], Dots[0][1]).to_coord()
     coord_start = (coord_start[0], coord_start[1]- int(cell_size[1]/2))
     coord_end = Cell(Dots[-1][0], Dots[-1][1]).to_coord()
     coord_end = (coord_end[0], coord_end[1]+int(cell_size[1]/2))
-    cv.line(maze, coord_start, Cell(Dots[0][0], Dots[0][1]).to_coord() , [0, 0, 255], 3)
-    cv.line(maze, coord_end, Cell(Dots[-1][0], Dots[-1][1]).to_coord() , [0, 0, 255], 3)
+    cv.line(maze, coord_start, Cell(Dots[0][0], Dots[0][1]).to_coord() , [255, 0, 0], 3)
+    cv.line(maze, coord_end, Cell(Dots[-1][0], Dots[-1][1]).to_coord() , [255, 0, 0], 3)
     
-    #dwaw the path lines 
-    for i in range(len(Dots)-1):        
-        coord1 = Cell(Dots[i][0], Dots[i][1]).to_coord()
-        coord2 = Cell(Dots[i+1][0], Dots[i+1][1]).to_coord()
-        
-        cv.line(maze, coord1, coord2 , [0, 0, 255], 3)
-    cv.imwrite(f'SOLUTION{mash_i}x{mash_j}.png',maze)
+
+    cv.imwrite(f'SOLUTION{mesh_i}x{mesh_j}.png',maze)
     
     #elapsed time
     end_time = time.time()
