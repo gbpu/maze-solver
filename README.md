@@ -16,7 +16,7 @@ To run one of the examples, type "Maze_examples/20 by 20 orthogonal maze.png" an
 - An image of the solution will be saved in the current folder. 
 Following the example: "SOLUTION20x20.png"
 
-![20 by 20 solveld maze](./SOLUTION20x20.png')
+![20 by 20 solveld maze](./SOLUTION20x20.png)
 
 
 
