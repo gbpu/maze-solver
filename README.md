@@ -6,7 +6,7 @@ Python code that solves mazes similar to [www.mazegenerator.net](www.mazegenerat
 ## How to run
 - Download a maze image from [www.mazegenerator.net](www.mazegenerator.net) or use from Maze_example folder
 
-![20 by 20 unsolveld maze](./'20 by 20 orthogonal maze.png')
+![20 by 20 unsolveld maze](./20\by\20\orthogonal\maze.png')
 
 - Run `maze_solver.py` 
 
