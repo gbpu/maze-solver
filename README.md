@@ -16,9 +16,9 @@ The script solves mazes similar to [Maze Generator](https://www.mazegenerator.ne
     To run one of the examples, type the input `Maze_examples/20 by 20 orthogonal maze.png` and then `20 20`.
 
 3. An image of the solution will be saved in the current folder. 
-Following the example: "solved20x20.png"
+Following the example: "20_by_20_solved.png"
 
-![20 by 20 solveld maze](./solved20x20.png)
+![20 by 20 solveld maze](./20_by_20_solved.png)
 
 
 

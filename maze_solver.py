@@ -11,8 +11,8 @@ start_time = time.time()
 
 #FILENAME FORMAT:  "{X_GRID} BY {Y_GRID}... .png" 
 #filename = "Maze_examples/200 by 200 orthogonal maze.png"
-filename = input("Type the path to file of the maze image:\n")
-mesh = input('Enter the mesh size separeted by space. e.g. "20 20":\n')
+filename = input('Enter the path to file of the maze image: (e.g. "Maze_examples/20 by 20 orthogonal maze.png")\n')
+mesh = input('Enter the mesh size separeted by space (e.g. "20 20"):\n')
 maze = cv.imread(filename)
 
 height, width = maze.shape[:2] #in pixels
@@ -214,7 +214,7 @@ def draw_path():
     cv.line(maze, coord_end, Cell(Dots[-1][0], Dots[-1][1]).to_coord() , [255, 0, 0], 3)
     
 
-    cv.imwrite(f'SOLUTION{mesh_i}x{mesh_j}.png',maze)
+    cv.imwrite(f'{mesh_i}_by_{mesh_j}_solved.png',maze)
     
     #elapsed time
     end_time = time.time()
